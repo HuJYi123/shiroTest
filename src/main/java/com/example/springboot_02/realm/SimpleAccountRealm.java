@@ -1,6 +1,8 @@
 package com.example.springboot_02.realm;
 
+import com.example.springboot_02.pojo.Role;
 import com.example.springboot_02.pojo.User;
+import com.example.springboot_02.service.RoleService;
 import com.example.springboot_02.service.UserService;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.AuthenticationInfo;
@@ -11,9 +13,13 @@ import org.apache.shiro.authz.SimpleAuthorizationInfo;
 import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
 import org.apache.shiro.util.ByteSource;
+import org.apache.shiro.util.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.util.ObjectUtils;
+
+import java.util.Collections;
+import java.util.List;
 
 /**
  * className:SimpleAccountRealm
@@ -23,21 +29,24 @@ import org.springframework.util.ObjectUtils;
  * @Date: 2023/10/7 17:35
  * @Author:hjy
  */
-@Component
 public class SimpleAccountRealm extends AuthorizingRealm {
     @Autowired
     private UserService userService;
+    @Autowired
+    private RoleService roleService;
+
     //授权
     @Override
     protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principalCollection) {
         String primaryPrincipal = (String) principalCollection.getPrimaryPrincipal();
         System.out.println("as:" + primaryPrincipal);
-        if ("zhangsn".equals(primaryPrincipal)) {
-            //分配权限
+        User user = userService.findByName(primaryPrincipal);
+        List<Role> list = roleService.getRolesByUserId(user.getId());
+        if (!CollectionUtils.isEmpty(list)) {
             SimpleAuthorizationInfo simpleAuthorizationInfo = new SimpleAuthorizationInfo();
-            simpleAuthorizationInfo.addRole("admin");
-            simpleAuthorizationInfo.addRole("user");
-            simpleAuthorizationInfo.addStringPermission("user:*:01");
+            list.forEach(role -> {
+                simpleAuthorizationInfo.addRole(role.getName());
+            });
             return simpleAuthorizationInfo;
         }
         return null;

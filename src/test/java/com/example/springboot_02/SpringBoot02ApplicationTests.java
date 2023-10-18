@@ -63,6 +63,9 @@ class SpringBoot02ApplicationTests {
         }catch (Exception e) {
             e.printStackTrace();
         }
+        if (subject.hasRole("admin")) {
+            System.out.println("有admin角色");
+        }
         if (subject.isAuthenticated()) {
             System.out.println(subject.hasRole("admin"));
         }
