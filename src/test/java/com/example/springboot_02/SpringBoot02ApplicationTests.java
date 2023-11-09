@@ -12,16 +12,17 @@ import org.apache.shiro.mgt.DefaultSecurityManager;
 import org.apache.shiro.subject.Subject;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
+
 import java.util.Calendar;
 
 
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
+@SpringBootTest
 class SpringBoot02ApplicationTests {
 
     @Test
     public void test1() {
         Calendar instance = Calendar.getInstance();
-        instance.add(Calendar.SECOND, 30);
+        instance.add(Calendar.SECOND, 100);
         String sign = JWT.create()
                 .withClaim("userid", 12)
                 .withClaim("username", "zhangsan")
@@ -34,7 +35,7 @@ class SpringBoot02ApplicationTests {
     public void test2() {
         JWTVerifier build = JWT.require(Algorithm.HMAC256("adad435!#@$")).build();
         DecodedJWT verify = build.verify(
-                "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyIiOiJ6aGFuZ3NhbiIsImV4cCI6MTY5NjY0Mzg5NywidXNlcmlkIjoxMn0.KSxot4uLcidaGi46_5lCO6EJxkRoXmepk1-12p1HTPI");
+                "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE2OTc2MTcxMTUsInVzZXJpZCI6MTIsInVzZXJuYW1lIjoiemhhbmdzYW4ifQ.GD_8udltltImISrBeEiRFOF69wm48bOySvEDCFHz8h");
         System.out.println(verify.getClaim("userid").asInt());
         System.out.println(verify.getClaim("username").asString());
     }

@@ -35,7 +35,12 @@ public class SimpleAccountRealm extends AuthorizingRealm {
     @Autowired
     private RoleService roleService;
 
-    //授权
+
+    /**
+     * 用户的授权：权限
+     * @param principalCollection
+     * @return
+     */
     @Override
     protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principalCollection) {
         String primaryPrincipal = (String) principalCollection.getPrimaryPrincipal();
@@ -52,7 +57,12 @@ public class SimpleAccountRealm extends AuthorizingRealm {
         return null;
     }
 
-    //认证
+    /**
+     * 登录用户的认证
+     * @param token
+     * @return
+     * @throws AuthenticationException
+     */
     @Override
     protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken token) throws AuthenticationException {
         String principal = (String) token.getPrincipal();

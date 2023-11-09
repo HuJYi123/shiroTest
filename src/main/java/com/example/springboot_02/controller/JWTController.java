@@ -34,7 +34,7 @@ public class JWTController {
         try {
             User u = userService.login(user);
             Map<String, String> payload = new HashMap<>();
-            payload.put("id", u.getId());
+            payload.put("id", u.getId().toString());
             payload.put("name", u.getName());
             String token = JWTUtils.getToken(payload);
             map.put("status", true);
